@@ -2,6 +2,9 @@ import numpy as np
 from tqdm import tqdm
 import os 
 import joblib
+import matplotlib.pyplot as plt
+import scipy.stats as stats
+
 
 from sklearn.base import BaseEstimator, RegressorMixin, clone
 from sklearn.metrics import (
@@ -213,8 +216,7 @@ def model_pipeline(df, target, task_type='regression', subset_frac=1.0, random_s
     return results
 
 
-import matplotlib.pyplot as plt
-import scipy.stats as stats
+
 
 def plot_results(results):
     for _ , res in enumerate(results):

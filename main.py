@@ -75,7 +75,7 @@ def main(args):
     fig, axes = plt.subplots(num_models, 2, figsize=(12, 4 * num_models), squeeze=False)
 
     os.makedirs("results", exist_ok=True)
-    
+
     for i in range(num_models):
         y_pred = y_pred_list[i]
         residuals = y_test - y_pred
@@ -90,6 +90,9 @@ def main(args):
         axes[i, 1].set_title(f'QQ-Plot of Residuals for {model_names[i]}')
 
     plt.tight_layout()
+    plot_path = f"results/{model_names[i]}_predictions_and_qqplot.png"
+    plt.savefig(plot_path)
+    print(f"Plot saved to {plot_path}")
     plt.show()
 
     summary_df = pd.DataFrame({
@@ -120,7 +123,7 @@ def main(args):
     plt.figure(figsize=(10, 6))
     plt.bar(model_names, r2_scores, color='lightgreen')
     plt.title('Comparison of Models based on R² Score')
-    plt.xlim((0.9, 1.0))
+    plt.ylim((0.98, 1.0))
     plt.xlabel('Models')
     plt.ylabel('R² Score')
     plt.xticks(rotation=45)
