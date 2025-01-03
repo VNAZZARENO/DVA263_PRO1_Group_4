@@ -102,19 +102,14 @@ class DynamicMixtureOfExperts(BaseEstimator, RegressorMixin):
         self.do_backward = do_backward
 
     def fit(self, X, y):
-        # 1) Fit each expert individually, store them
         self.fitted_experts_ = [clone(exp).fit(X, y) for exp in self.experts]
 
-        # 2) Store each expert's predictions on training set (for quick MSE calculation)
-        #    predictions_ will be shape (n_samples, n_experts)
         expert_preds = []
         for model in self.fitted_experts_:
             expert_preds.append(model.predict(X))
         self.expert_preds_ = np.column_stack(expert_preds)
 
-        # Start with either no experts or the single best expert
-        # We'll pick whichever single expert yields the best (lowest) MSE alone,
-        # then we do a forward selection from there.
+        
         best_mse = float("inf")
         best_idx = 0
         n_experts = len(self.fitted_experts_)
@@ -123,10 +118,9 @@ class DynamicMixtureOfExperts(BaseEstimator, RegressorMixin):
             if mse_i < best_mse:
                 best_mse = mse_i
                 best_idx = i
-        self.selected_ = {best_idx}  # keep track of which experts are chosen
+        self.selected_ = {best_idx}  
 
         current_mse = best_mse
-        # Forward-backward passes
         for it in range(self.max_iter):
             improved = False
 
@@ -137,7 +131,6 @@ class DynamicMixtureOfExperts(BaseEstimator, RegressorMixin):
             best_add_idx = None
             for i in range(n_experts):
                 if i not in self.selected_:
-                    # Attempt adding expert i
                     trial_subset = list(self.selected_) + [i]
                     y_ens = self._ensemble_predictions(self.expert_preds_, trial_subset)
                     mse_trial = mean_squared_error(y, y_ens)
@@ -145,7 +138,6 @@ class DynamicMixtureOfExperts(BaseEstimator, RegressorMixin):
                         best_add_mse = mse_trial
                         best_add_idx = i
 
-            # If adding an expert improves MSE, do it
             if best_add_idx is not None and best_add_mse < current_mse:
                 self.selected_.add(best_add_idx)
                 current_mse = best_add_mse
@@ -164,32 +156,26 @@ class DynamicMixtureOfExperts(BaseEstimator, RegressorMixin):
                     if mse_trial < best_remove_mse:
                         best_remove_mse = mse_trial
                         best_remove_idx = i
-                # If removing an expert further reduces MSE, remove it
                 if best_remove_idx is not None and best_remove_mse < current_mse:
                     self.selected_.remove(best_remove_idx)
                     current_mse = best_remove_mse
                     improved = True
 
-            # If no improvement in this iteration, break
             if not improved:
                 break
 
-        # After fitting, we know which experts are chosen
         self.selected_ = sorted(self.selected_)
         self.current_mse_ = current_mse
         return self
 
     def predict(self, X):
-        # Average predictions from the chosen experts
         if not hasattr(self, "selected_"):
             raise RuntimeError("Model not fitted yet!")
         preds = [self.fitted_experts_[i].predict(X) for i in self.selected_]
-        # Simple average
         return np.mean(preds, axis=0)
 
     def _ensemble_predictions(self, expert_preds, subset):
-        """Helper: returns the average prediction of experts in `subset`."""
-        subset_preds = expert_preds[:, subset]  # shape (n_samples, len(subset))
+        subset_preds = expert_preds[:, subset]  
         return np.mean(subset_preds, axis=1)
 
 

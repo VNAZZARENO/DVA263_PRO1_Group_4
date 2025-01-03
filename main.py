@@ -124,7 +124,7 @@ def main(args):
     plt.figure(figsize=(10, 6))
     plt.bar(model_names, r2_scores, color='lightgreen')
     plt.title('Comparison of Models based on R² Score')
-    plt.ylim((0.98, 1.0))
+    plt.ylim((0.985, 1.0))
     plt.xlabel('Models')
     plt.ylabel('R² Score')
     plt.xticks(rotation=45)
