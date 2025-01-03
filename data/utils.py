@@ -364,8 +364,6 @@ def model_pipeline(df, target, task_type='regression', subset_frac=1.0, random_s
     return results
 
 
-
-
 def plot_results(results):
     for _ , res in enumerate(results):
         model_name = res['model']
