@@ -127,16 +127,15 @@ The table below summarizes the performance of the models tested for the regressi
    ![R² Comparison](https://github.com/VNAZZARENO/DVA263_PRO1_Group_4/blob/main/results/comparison_r2.png?raw=true)
 
 3. **Predictions and Residuals**:
-   - **Mixture of Experts**:  
-     ![MixtureOfExperts Predictions](https://github.com/VNAZZARENO/DVA263_PRO1_Group_4/blob/main/results/MixtureOfExperts_predictions_and_qqplot.png?raw=true)
-
+   ![All models](https://github.com/VNAZZARENO/DVA263_PRO1_Group_4/blob/main/results/MLPRegressor_predictions_and_qqplot.png?raw=true)
+   
 ---
 
 ### **Conclusion**
 
-- The **MLPRegressor** demonstrated much better performance overall in terms of both MSE and R² score, making it the most effective model for the `risk_evaluation` prediction.
-- The **Mixture of Experts** approach provided competitive results and can still be valuable in scenarios requiring robustness.
-- The **LightGBM Regressor** remains a strong baseline but was outperformed in this task.
+- The **MLPRegressor** showed much better performance overall in terms of both MSE and R² score, making it the most effective model for the `risk_evaluation` prediction.
+- The **Mixture of Experts** approach provided better results than simple LGBM and can still be used in scenarios requiring robustness and results explanations.
+- The **LightGBM Regressor** remains a strong baseline but was outperformed by a combination of LGBM + Linear Regression.
 
 ---
 
