@@ -235,7 +235,6 @@ def model_pipeline(df, target, task_type='regression', subset_frac=1.0, random_s
         scoring_metric = 'neg_mean_squared_error'
         
     elif task_type == 'classification':
-        # Example classification version with LightGBM + a simple MoE (LightGBM + SVC)
         models_list = [
             (
                 LGBMClassifier(random_state=random_state),
