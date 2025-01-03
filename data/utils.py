@@ -205,22 +205,32 @@ def model_pipeline(df, target, task_type='regression', subset_frac=1.0, random_s
 
     if task_type == 'regression':
         models_list = [
-            (
+        (
+            LGBMRegressor(random_state=random_state),
+            {
+                'learning_rate': [0.01, 0.1],
+                'n_estimators': [100, 200]
+            }
+        ),
+        (
+            MixtureOfExperts(experts=[
                 LGBMRegressor(random_state=random_state),
-                {
-                    'learning_rate': [0.01, 0.1],
-                    'n_estimators': [100, 200]
-                }
-            ),
-            (
-                MixtureOfExperts(experts=[
-                    LGBMRegressor(random_state=random_state),
-                    LinearRegression()
-                ]),
-                {
-                    # 'experts__0__learning_rate': [0.01, 0.1], # Not directly supported by default GridSearch 
-                }
-            )
+                LinearRegression()
+            ]),
+            {
+                # GridSearch over MixtureOfExperts is not directly supported.
+            }
+        ),
+        (
+            MLPRegressor(max_iter=500, random_state=random_state),
+            {
+                'hidden_layer_sizes': [(64,), (128,), (64, 32)],
+                'activation': ['relu', 'tanh'],
+                'solver': ['adam', 'sgd'],
+                'alpha': [0.0001, 0.001],
+                'learning_rate': ['constant', 'adaptive']
+            }
+        )
         ]
         scoring_metric = 'neg_mean_squared_error'
         
