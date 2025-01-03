@@ -1,3 +1,4 @@
+# utils.py
 import numpy as np
 from tqdm import tqdm
 import os 
@@ -23,6 +24,10 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 from lightgbm import LGBMRegressor, LGBMClassifier
 from sklearn.svm import SVC, SVR
 from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
+from sklearn.base import BaseEstimator, RegressorMixin, clone
+
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.neural_network import MLPRegressor
 
 
 
@@ -39,13 +44,156 @@ class MixtureOfExperts(BaseEstimator, RegressorMixin):
     def predict(self, X):
         predictions = np.column_stack([expert.predict(X) for expert in self.experts_])
         return predictions.mean(axis=1)
+    
+
+
+class WeightedMixtureOfExperts(BaseEstimator, RegressorMixin):
+    def __init__(self, expert1=None, expert2=None):
+        self.expert1 = expert1
+        self.expert2 = expert2
+        self.alpha_ = 0.5 
+    
+    def fit(self, X, y):
+        self.expert1_ = clone(self.expert1)
+        self.expert2_ = clone(self.expert2)
+        
+        self.expert1_.fit(X, y)
+        self.expert2_.fit(X, y)
+        
+        y1 = self.expert1_.predict(X)
+        y2 = self.expert2_.predict(X)
+        
+        p = y1 - y2
+        numerator = np.sum(p * (y2 - y))
+        denominator = np.sum(p**2)
+        
+        if denominator == 0:
+            self.alpha_ = 0.5
+        else:
+            alpha_opt = - numerator / denominator
+            self.alpha_ = np.clip(alpha_opt, 0.0, 1.0)
+        
+        return self
+    
+    def predict(self, X):
+        y1 = self.expert1_.predict(X)
+        y2 = self.expert2_.predict(X)
+        return self.alpha_ * y1 + (1 - self.alpha_) * y2
+
+import numpy as np
+from sklearn.base import BaseEstimator, RegressorMixin, clone
+from sklearn.metrics import mean_squared_error
+
+class DynamicMixtureOfExperts(BaseEstimator, RegressorMixin):
+    """
+    A dynamic approach to building an ensemble of experts
+    by iteratively adding or removing experts to minimize MSE.
+    Uses a simple average of the selected experts' predictions.
+    """
+
+    def __init__(self, experts=None, max_iter=5, do_backward=True):
+        """
+        :param experts: List of scikit-learn regressor objects (unfitted).
+        :param max_iter: Maximum number of forward-backward passes.
+        :param do_backward: Whether to do backward elimination after forward selection.
+        """
+        self.experts = experts if experts is not None else []
+        self.max_iter = max_iter
+        self.do_backward = do_backward
+
+    def fit(self, X, y):
+        # 1) Fit each expert individually, store them
+        self.fitted_experts_ = [clone(exp).fit(X, y) for exp in self.experts]
+
+        # 2) Store each expert's predictions on training set (for quick MSE calculation)
+        #    predictions_ will be shape (n_samples, n_experts)
+        expert_preds = []
+        for model in self.fitted_experts_:
+            expert_preds.append(model.predict(X))
+        self.expert_preds_ = np.column_stack(expert_preds)
+
+        # Start with either no experts or the single best expert
+        # We'll pick whichever single expert yields the best (lowest) MSE alone,
+        # then we do a forward selection from there.
+        best_mse = float("inf")
+        best_idx = 0
+        n_experts = len(self.fitted_experts_)
+        for i in range(n_experts):
+            mse_i = mean_squared_error(y, self.expert_preds_[:, i])
+            if mse_i < best_mse:
+                best_mse = mse_i
+                best_idx = i
+        self.selected_ = {best_idx}  # keep track of which experts are chosen
+
+        current_mse = best_mse
+        # Forward-backward passes
+        for it in range(self.max_iter):
+            improved = False
+
+            # ========================
+            # FORWARD SELECTION
+            # ========================
+            best_add_mse = current_mse
+            best_add_idx = None
+            for i in range(n_experts):
+                if i not in self.selected_:
+                    # Attempt adding expert i
+                    trial_subset = list(self.selected_) + [i]
+                    y_ens = self._ensemble_predictions(self.expert_preds_, trial_subset)
+                    mse_trial = mean_squared_error(y, y_ens)
+                    if mse_trial < best_add_mse:
+                        best_add_mse = mse_trial
+                        best_add_idx = i
+
+            # If adding an expert improves MSE, do it
+            if best_add_idx is not None and best_add_mse < current_mse:
+                self.selected_.add(best_add_idx)
+                current_mse = best_add_mse
+                improved = True
+
+            # ========================
+            # BACKWARD ELIMINATION
+            # ========================
+            if self.do_backward and len(self.selected_) > 1:
+                best_remove_mse = current_mse
+                best_remove_idx = None
+                for i in list(self.selected_):
+                    trial_subset = list(self.selected_ - {i})
+                    y_ens = self._ensemble_predictions(self.expert_preds_, trial_subset)
+                    mse_trial = mean_squared_error(y, y_ens)
+                    if mse_trial < best_remove_mse:
+                        best_remove_mse = mse_trial
+                        best_remove_idx = i
+                # If removing an expert further reduces MSE, remove it
+                if best_remove_idx is not None and best_remove_mse < current_mse:
+                    self.selected_.remove(best_remove_idx)
+                    current_mse = best_remove_mse
+                    improved = True
+
+            # If no improvement in this iteration, break
+            if not improved:
+                break
+
+        # After fitting, we know which experts are chosen
+        self.selected_ = sorted(self.selected_)
+        self.current_mse_ = current_mse
+        return self
+
+    def predict(self, X):
+        # Average predictions from the chosen experts
+        if not hasattr(self, "selected_"):
+            raise RuntimeError("Model not fitted yet!")
+        preds = [self.fitted_experts_[i].predict(X) for i in self.selected_]
+        # Simple average
+        return np.mean(preds, axis=0)
+
+    def _ensemble_predictions(self, expert_preds, subset):
+        """Helper: returns the average prediction of experts in `subset`."""
+        subset_preds = expert_preds[:, subset]  # shape (n_samples, len(subset))
+        return np.mean(subset_preds, axis=1)
+
 
 def model_pipeline(df, target, task_type='regression', subset_frac=1.0, random_state=42):
-    """
-    Simplified pipeline focusing only on LightGBM and a MixtureOfExperts for regression or classification.
-    """
-    
-    # Identify categorical and numerical columns
     try:
         categorical_cols = df.select_dtypes(include=['object']).columns
         categorical_cols = categorical_cols.drop(target)

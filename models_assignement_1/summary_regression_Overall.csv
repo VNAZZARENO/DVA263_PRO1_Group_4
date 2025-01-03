@@ -1,3 +1,0 @@
-Model,Best CV Score (Neg MSE),MSE on Test Set,R² on Test Set,Best Parameters
-LGBMRegressor,0.0002026823112886925,0.0002356785712621503,0.9952597124431171,"{'model__learning_rate': 0.1, 'model__n_estimators': 200}"
-MixtureOfExperts,0.00019501560408567497,0.00017138087766590152,0.9965529549948615,{}

@@ -1,3 +1,4 @@
+# main.py
 import os
 import logging
 import argparse
@@ -104,7 +105,7 @@ def main(args):
     })
 
     os.makedirs("models_assignement_1", exist_ok=True)
-    summary_path = "models_assignement_1/summary_regression_Overall.csv"
+    summary_path = "models_project/summary_regression_Overall.csv"
     summary_df.to_csv(summary_path, index=False)
     print(f"Summary saved to {summary_path}")
 
@@ -123,7 +124,7 @@ def main(args):
     plt.figure(figsize=(10, 6))
     plt.bar(model_names, r2_scores, color='lightgreen')
     plt.title('Comparison of Models based on R² Score')
-    plt.ylim((0.98, 1.0))
+    plt.ylim((0.95, 1.0))
     plt.xlabel('Models')
     plt.ylabel('R² Score')
     plt.xticks(rotation=45)
