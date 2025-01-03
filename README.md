@@ -87,16 +87,56 @@ python main.py \
 
 ---
 
+Here’s the **Results** section updated to display images using direct links to the repository:
+
+---
+
 ## **Results**
 
-### **Model Comparisons**
-- **MSE Comparison**: See `results/comparison_mse.png`.
-- **R² Comparison**: See `results/comparison_r2.png`.
+### **Model Comparison**
 
-### **Example Plots**
-- LightGBM Regressor: `results/LGBMRegressor_predictions_and_qqplot.png`
-- Mixture of Experts: `results/MixtureOfExperts_predictions_and_qqplot.png`
-- Weighted Mixture of Experts: `results/WeightedMixtureOfExperts_predictions_and_qqplot.png`
+The table below summarizes the performance of the models tested for the regression task, ranked by their performance on the test set:
+
+| **Model**           | **Best CV Score (Neg MSE)** | **MSE on Test Set** | **R² on Test Set** | **Best Parameters**                                                                                     |
+|----------------------|-----------------------------|----------------------|--------------------|---------------------------------------------------------------------------------------------------------|
+| **MLPRegressor**     | 0.000180                   | 0.000086            | 0.9983            | `{'activation': 'relu', 'alpha': 0.001, 'hidden_layer_sizes': (64,), 'learning_rate': 'constant', 'solver': 'adam'}` |
+| **MixtureOfExperts** | 0.000191                   | 0.000179            | 0.9964            | `{}`                                                                                                   |
+| **LGBMRegressor**    | 0.000194                   | 0.000252            | 0.9949            | `{'learning_rate': 0.1, 'n_estimators': 200}`                                                          |
+
+
+1. **MLPRegressor**:
+   - Achieved the best performance with an **MSE of 0.000086** and **R² of 0.9983**.
+   - Best parameters include a single hidden layer with 64 units, **ReLU activation**, and the **Adam optimizer** with a constant learning rate.
+
+2. **MixtureOfExperts**:
+   - Performed well with an **MSE of 0.000179** and **R² of 0.9964**.
+   - The model dynamically combined predictions from multiple experts, showcasing robustness but slightly lagging behind MLP.
+
+3. **LGBMRegressor**:
+   - Delivered solid performance with an **MSE of 0.000252** and **R² of 0.9949**.
+   - Optimized parameters included a learning rate of 0.1 and 200 estimators, but it was outperformed by the MLP and Mixture of Experts.
+
+---
+
+### **Visualizations**
+
+1. **MSE Comparison**:  
+   ![MSE Comparison](https://github.com/VNAZZARENO/DVA263_PRO1_Group_4/blob/main/results/comparison_mse.png?raw=true)
+
+2. **R² Score Comparison**:  
+   ![R² Comparison](https://github.com/VNAZZARENO/DVA263_PRO1_Group_4/blob/main/results/comparison_r2.png?raw=true)
+
+3. **Predictions and Residuals**:
+   - **Mixture of Experts**:  
+     ![MixtureOfExperts Predictions](https://github.com/VNAZZARENO/DVA263_PRO1_Group_4/blob/main/results/MixtureOfExperts_predictions_and_qqplot.png?raw=true)
+
+---
+
+### **Conclusion**
+
+- The **MLPRegressor** demonstrated much better performance overall in terms of both MSE and R² score, making it the most effective model for the `risk_evaluation` prediction.
+- The **Mixture of Experts** approach provided competitive results and can still be valuable in scenarios requiring robustness.
+- The **LightGBM Regressor** remains a strong baseline but was outperformed in this task.
 
 ---
 
