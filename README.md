@@ -104,7 +104,3 @@ python main.py \
 For any questions, reach out to:  
 - Vincent Nazzareno: vincent.nazzareno@gmail.com  
 - Nicola Baldoni: nicola.baldoni.01@gmail.com  
-
----
-
-Let me know if this is good or if you want any further modifications!
