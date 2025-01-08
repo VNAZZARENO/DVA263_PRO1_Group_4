@@ -27,20 +27,26 @@ def main(args):
 
     preprocess_data(args.output_dir, datasets)
 
-    df_merged = pd.merge(
-        simulation_data, 
-        track_data, 
-        on="subject",   
-        how="inner"            
-    )
-    for col in df_merged.columns:
-        if col.endswith('_x'):
-            base_col = col[:-2]  
-            if f"{base_col}_y" in df_merged.columns:
-                df_merged[base_col] = df_merged[[col, f"{base_col}_y"]].mean(axis=1)
-                df_merged.drop(columns=[col, f"{base_col}_y"], inplace=True)
+    # df_merged = pd.merge(
+    #     simulation_data, 
+    #     track_data, 
+    #     on="subject",   
+    #     how="inner"            
+    # )
+    # for col in df_merged.columns:
+    #     if col.endswith('_x'):
+    #         base_col = col[:-2]  
+    #         if f"{base_col}_y" in df_merged.columns:
+    #             df_merged[base_col] = df_merged[[col, f"{base_col}_y"]].mean(axis=1)
+    #             df_merged.drop(columns=[col, f"{base_col}_y"], inplace=True)
+    # df_merged = create_features(df_merged)
 
-    df_merged = create_features(df_merged)
+    df_merged = create_features(track_data)
+    
+    drop_col_override = ["hr", "hrv_lf", "hrv_hf", 'hrv_lfhf_ratio', 'EBRmean', 'BDmean']
+    print(f"Droping colums: {drop_col_override}")
+    # df_merged = create_features(simulation_data)
+    df_merged.drop(columns=drop_col_override, axis=1, inplace=True)
     df_merged.fillna(df_merged.mean(numeric_only=True), inplace=True)
 
     results = model_pipeline(

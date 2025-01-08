@@ -1,4 +1,4 @@
 Model,Best CV Score (Neg MSE),MSE on Test Set,R² on Test Set,Best Parameters
-LGBMRegressor,0.00019446300923366673,0.00025226708092663375,0.9949260618039067,"{'model__learning_rate': 0.1, 'model__n_estimators': 200}"
-MixtureOfExperts,0.00019056672518648392,0.00017936410340922256,0.996392385514776,{}
-MLPRegressor,0.00018005346602260666,8.645374689908561e-05,0.9982611248087727,"{'model__activation': 'relu', 'model__alpha': 0.001, 'model__hidden_layer_sizes': (64,), 'model__learning_rate': 'constant', 'model__solver': 'adam'}"
+LGBMRegressor,0.0012309729164891735,3.634400863116714e-05,0.9961108449430496,"{'model__learning_rate': 0.1, 'model__n_estimators': 100}"
+MixtureOfExperts,0.0011959089220278684,0.0013510897450067089,0.8554205297629012,{}
+MLPRegressor,0.019033874552405704,0.010335729158158087,-0.10602145543870689,"{'model__activation': 'tanh', 'model__alpha': 0.001, 'model__hidden_layer_sizes': (128,), 'model__learning_rate': 'constant', 'model__solver': 'adam'}"
