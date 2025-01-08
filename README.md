@@ -68,13 +68,7 @@ pip install -r requirements.txt
 ### **Execute Main Script**
 Run the entire pipeline (data preprocessing, model training, evaluation, and visualization) with:
 ```bash
-python main.py \
-    --data_dir data/ \
-    --output_dir preprocessed_data/ \
-    --target_column risk_evaluation \
-    --task_type regression \
-    --subset_frac 1.0 \
-    --random_state 42
+python main.py --data_dir data/ --output_dir preprocessed_data/ --target_column risk_evaluation --task_type regression --subset_frac 1.0 --random_state 42
 ```
 
 ### **Arguments:**
