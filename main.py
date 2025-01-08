@@ -40,13 +40,15 @@ def main(args):
     #             df_merged[base_col] = df_merged[[col, f"{base_col}_y"]].mean(axis=1)
     #             df_merged.drop(columns=[col, f"{base_col}_y"], inplace=True)
     # df_merged = create_features(df_merged)
+    
+    # df_merged = create_features(simulation_data)
 
     df_merged = create_features(track_data)
-    
-    drop_col_override = ["hr", "hrv_lf", "hrv_hf", 'hrv_lfhf_ratio', 'EBRmean', 'BDmean']
-    print(f"Droping colums: {drop_col_override}")
-    # df_merged = create_features(simulation_data)
-    df_merged.drop(columns=drop_col_override, axis=1, inplace=True)
+
+    # drop_col_override = ["hr", "hrv_lf", "hrv_hf", 'hrv_lfhf_ratio', 'EBRmean', 'BDmean']
+    # print(f"Droping colums: {drop_col_override}")
+    # df_merged.drop(columns=drop_col_override, axis=1, inplace=True)
+
     df_merged.fillna(df_merged.mean(numeric_only=True), inplace=True)
 
     results = model_pipeline(
@@ -130,7 +132,7 @@ def main(args):
     plt.figure(figsize=(10, 6))
     plt.bar(model_names, r2_scores, color='lightgreen')
     plt.title('Comparison of Models based on R² Score')
-    plt.ylim((0.985, 1.0))
+    # plt.ylim((0.8, 1.0))
     plt.xlabel('Models')
     plt.ylabel('R² Score')
     plt.xticks(rotation=45)
@@ -143,7 +145,7 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run data preprocessing and model pipeline.")
     parser.add_argument('--data_dir', type=str, default="data/Simusafe_Dataset", help="Path to the dataset directory.")
-    parser.add_argument('--output_dir', type=str, default="preprocessed_data", help="Path to save preprocessed data.")
+    parser.add_argument('--output_dir', type=str, default="preprocessed_data/", help="Path to save preprocessed data.")
     parser.add_argument('--target_column', type=str, default="risk_evaluation", help="Target column for the pipeline.")
     parser.add_argument('--task_type', type=str, choices=["regression", "classification"], default="regression", help="Task type: 'regression' or 'classification'.")
     parser.add_argument('--subset_frac', type=float, default=1.0, help="Fraction of the data to use for training.")

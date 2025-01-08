@@ -256,10 +256,13 @@ def model_pipeline(df, target, task_type='regression', subset_frac=1.0, random_s
     else:
         raise ValueError("task_type must be either 'regression' or 'classification'")
 
-    df_sampled = df.sample(frac=subset_frac, random_state=random_state)
-
-    X = df_sampled.drop(columns=target)
-    y = df_sampled[target]
+    if subset_frac:
+        df_sampled = df.sample(frac=subset_frac, random_state=random_state)
+        X = df_sampled.drop(columns=target)
+        y = df_sampled[target]
+    else:
+        X = df.drop(columns=target)
+        y = df[target]
 
     if task_type == 'classification':
         X_train, X_test, y_train, y_test = train_test_split(
