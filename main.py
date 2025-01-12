@@ -41,23 +41,40 @@ def main(args):
     #             df_merged.drop(columns=[col, f"{base_col}_y"], inplace=True)
     # df_merged = create_features(df_merged)
     
-    # df_merged = create_features(simulation_data)
-
     df_merged = create_features(track_data)
+    
+    if args.use_test_dataset:
+        df_test = create_features(simulation_data)
 
-    # drop_col_override = ["hr", "hrv_lf", "hrv_hf", 'hrv_lfhf_ratio', 'EBRmean', 'BDmean']
-    # print(f"Droping colums: {drop_col_override}")
-    # df_merged.drop(columns=drop_col_override, axis=1, inplace=True)
+    elif args.drop_nan_columns:
+        drop_col_override = ["hr", "hrv_lf", "hrv_hf", 'hrv_lfhf_ratio', 'EBRmean', 'BDmean']
+        print(f"Droping colums: {drop_col_override}")
+        df_merged.drop(columns=drop_col_override, axis=1, inplace=True)
+        df_merged.fillna(df_merged.mean(numeric_only=True), inplace=True)
+        if args.use_test_dataset:
+            df_test.drop(columns=drop_col_override, axis=1, inplace=True)
+            df_test.fillna(df_test.mean(numeric_only=True), inplace=True)
 
-    df_merged.fillna(df_merged.mean(numeric_only=True), inplace=True)
-
-    results = model_pipeline(
-        df=df_merged, 
-        target=args.target_column, 
-        task_type=args.task_type, 
-        subset_frac=args.subset_frac, 
-        random_state=args.random_state
-    )
+    if args.use_test_dataset:
+        print("Not using testing dataset")
+        results = model_pipeline(
+            df=df_merged, 
+            target=args.target_column, 
+            test_dataset=df_test,
+            task_type=args.task_type, 
+            subset_frac=args.subset_frac, 
+            random_state=args.random_state
+        )
+    else:
+        print("Using a testing dataset")
+        results = model_pipeline(
+            df=df_merged, 
+            target=args.target_column, 
+            task_type=args.task_type, 
+            subset_frac=args.subset_frac, 
+            random_state=args.random_state
+        )
+    
 
     model_names = []
     best_scores = []
@@ -148,7 +165,9 @@ if __name__ == "__main__":
     parser.add_argument('--output_dir', type=str, default="preprocessed_data/", help="Path to save preprocessed data.")
     parser.add_argument('--target_column', type=str, default="risk_evaluation", help="Target column for the pipeline.")
     parser.add_argument('--task_type', type=str, choices=["regression", "classification"], default="regression", help="Task type: 'regression' or 'classification'.")
+    parser.add_argument('--use_test_dataset', type=bool, default=False, help="Use or not Simulation data as a testing dataset")
     parser.add_argument('--subset_frac', type=float, default=1.0, help="Fraction of the data to use for training.")
+    parser.add_argument('--drop_nan_columns', type=bool, default=False, help="Drop the columns which are >75% NaN values.")
     parser.add_argument('--random_state', type=int, default=42, help="Random state for reproducibility.")
     
     args = parser.parse_args()

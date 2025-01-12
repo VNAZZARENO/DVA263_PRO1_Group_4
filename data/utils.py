@@ -179,7 +179,12 @@ class DynamicMixtureOfExperts(BaseEstimator, RegressorMixin):
         return np.mean(subset_preds, axis=1)
 
 
-def model_pipeline(df, target, task_type='regression', subset_frac=1.0, random_state=42):
+def model_pipeline(df, 
+                   target, 
+                   test_dataset=None,
+                   task_type='regression', 
+                   subset_frac=1.0, 
+                   random_state=42):
     try:
         categorical_cols = df.select_dtypes(include=['object']).columns
         categorical_cols = categorical_cols.drop(target)
@@ -269,9 +274,16 @@ def model_pipeline(df, target, task_type='regression', subset_frac=1.0, random_s
             X, y, test_size=0.2, random_state=random_state, stratify=y
         )
     else:
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, test_size=0.2, random_state=random_state
-        )
+        if test_dataset is not None:
+            print("Using testing dataset as X_test/y_test")
+            X_train = X
+            y_train = y
+            X_test = test_dataset.drop(columns=target)
+            y_test = test_dataset[target]
+        else:
+            X_train, X_test, y_train, y_test = train_test_split(
+                X, y, test_size=0.2, random_state=random_state
+            )
 
     pipelines = [
         Pipeline(steps=[
