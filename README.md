@@ -75,15 +75,15 @@ Place the dataset files in the `data/` directory:
 ### 4. Run the Project
 Execute the pipeline with:
 ```bash
-python main.py --target_column risk_evaluation --task_type regression --use_pca True --drop_nan_columns True --random_state 42
+python main.py --target_column risk_evaluation --task_type classification --drop_nan_columns True --random_state 42
 ```
 
-#### Key Arguments:
+#### Main Arguments:
 - `--data_dir`: Path to dataset directory (default: `data/`).
 - `--output_dir`: Directory for preprocessed data (default: `preprocessed_data/`).
 - `--target_column`: Column to predict (default: `risk_evaluation`).
 - `--task_type`: Task type: `regression` or `classification`.
-- `--use_pca`: Whether to apply PCA (default: `False`).
+- `--use_pca`: Whether to apply PCA (default: `True`).
 - `--drop_nan_columns`: Drop columns with >75% NaN values (default: `False`).
 - `--random_state`: Seed for reproducibility (default: `42`).
 

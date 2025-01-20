@@ -197,9 +197,9 @@ if __name__ == "__main__":
     parser.add_argument('--output_dir', type=str, default="preprocessed_data/", help="Path to save preprocessed data.")
     parser.add_argument('--target_column', type=str, default="risk_evaluation", help="Target column for the pipeline.")
     parser.add_argument('--task_type', type=str, choices=["regression", "classification"], default="regression", help="Task type: 'regression' or 'classification'.")
-    parser.add_argument('--use_pca', type=bool, default=False, help="Use PCA: Use PCA for Feature Reduction")
+    parser.add_argument('--use_pca', type=bool, default=True, help="Use PCA: Use PCA for Feature Reduction")
     parser.add_argument('--use_test_dataset', type=bool, default=False, help="Use or not Simulation data as a testing dataset")
-    parser.add_argument('--subset_frac', type=float, default=None, help="Fraction of the data to use for training.")
+    parser.add_argument('--subset_frac', type=float, default=None, help="Fraction of the data to use for training (to be quicker).")
     parser.add_argument('--drop_nan_columns', type=bool, default=False, help="Drop the columns which are >75% NaN values.")
     parser.add_argument('--random_state', type=int, default=42, help="Random state for reproducibility.")
     
