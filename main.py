@@ -8,9 +8,13 @@ import matplotlib.pyplot as plt
 import scipy.stats as stats
 
 from data.utils import model_pipeline
-from data.preprocessing import preprocess_data, create_features
+from data.preprocessing import preprocess_data, create_features, apply_pca
 
 logging.basicConfig(level=logging.INFO)
+
+import warnings
+warnings.filterwarnings("ignore", message="Could not find the number of physical cores")
+
 
 def main(args):
     os.makedirs(args.output_dir, exist_ok=True)
@@ -42,15 +46,32 @@ def main(args):
     # df_merged = create_features(df_merged)
     
     df_merged = create_features(track_data)
-    
+
+
+    transformed_data, pca_model = apply_pca(df_merged, n_components=5)
+
+    # Log or print the explained variance ratio
+    print("Explained Variance Ratio:", pca_model.explained_variance_ratio_)
+    print("PCA Transformed Data Shape:", transformed_data.shape)
+        
     if args.use_test_dataset:
         df_test = create_features(simulation_data)
 
     elif args.drop_nan_columns:
-        drop_col_override = ["hr", "hrv_lf", "hrv_hf", 'hrv_lfhf_ratio', 'EBRmean', 'BDmean']
+        drop_col_override = ["hr", "hrv_lf", "hrv_hf", 
+                             'hrv_lfhf_ratio', 'EBRmean', 'BDmean']
         print(f"Droping colums: {drop_col_override}")
+
+        row_index_to_drop = []
+        for index, row in df_merged.iterrows():
+            if row.isna().sum() > len(df_merged.columns) * 0.75:  # Count NaNs and compare
+                row_index_to_drop.append(index)
+        
+        df_merged.drop(index=row_index_to_drop, inplace=True)
+
         df_merged.drop(columns=drop_col_override, axis=1, inplace=True)
         df_merged.fillna(df_merged.mean(numeric_only=True), inplace=True)
+
         if args.use_test_dataset:
             df_test.drop(columns=drop_col_override, axis=1, inplace=True)
             df_test.fillna(df_test.mean(numeric_only=True), inplace=True)
@@ -166,7 +187,7 @@ if __name__ == "__main__":
     parser.add_argument('--target_column', type=str, default="risk_evaluation", help="Target column for the pipeline.")
     parser.add_argument('--task_type', type=str, choices=["regression", "classification"], default="regression", help="Task type: 'regression' or 'classification'.")
     parser.add_argument('--use_test_dataset', type=bool, default=False, help="Use or not Simulation data as a testing dataset")
-    parser.add_argument('--subset_frac', type=float, default=1.0, help="Fraction of the data to use for training.")
+    parser.add_argument('--subset_frac', type=float, default=None, help="Fraction of the data to use for training.")
     parser.add_argument('--drop_nan_columns', type=bool, default=False, help="Drop the columns which are >75% NaN values.")
     parser.add_argument('--random_state', type=int, default=42, help="Random state for reproducibility.")
     

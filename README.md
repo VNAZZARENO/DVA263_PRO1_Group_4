@@ -76,8 +76,41 @@ python main.py --data_dir data/ --output_dir preprocessed_data/ --target_column 
 - `--output_dir`: Path to save the preprocessed data (default: `preprocessed_data/`).
 - `--target_column`: The column to predict (`risk_evaluation` in this case).
 - `--task_type`: Type of task (`regression` or `classification`).
+- `--use_test_dataset`: Use or not Simulation data as a testing dataset (default: `False`).
 - `--subset_frac`: Fraction of the dataset to use (default: `1.0` for all data).
+- `--drop_nan_columns`: Drop the columns which are >75% NaN values (default: `False`).
 - `--random_state`: Random seed for reproducibility (default: `42`).
+
+---
+
+Here’s the **Results** section updated to display images using direct links to the repository:
+
+---
+
+## **Results**
+
+### **Model Comparison**
+
+The table below summarizes the performance of the models tested for the regression task, ranked by their performance on the test set:
+
+| **Model**           | **Best CV Score (Neg MSE)** | **MSE on Test Set** | **R² on Test Set** | **Best Parameters**                                                                                     |
+|----------------------|-----------------------------|----------------------|--------------------|---------------------------------------------------------------------------------------------------------|
+| **MLPRegressor**     | 0.000180                   | 0.000086            | 0.9983            | `{'activation': 'relu', 'alpha': 0.001, 'hidden_layer_sizes': (64,), 'learning_rate': 'constant', 'solver': 'adam'}` |
+| **MixtureOfExperts** | 0.000191                   | 0.000179            | 0.9964            | `{}`                                                                                                   |
+| **LGBMRegressor**    | 0.000194                   | 0.000252            | 0.9949            | `{'learning_rate': 0.1, 'n_estimators': 200}`                                                          |
+
+
+1. **MLPRegressor**:
+   - Achieved the best performance with an **MSE of 0.000086** and **R² of 0.9983**.
+   - Best parameters include a single hidden layer with 64 units, **ReLU activation**, and the **Adam optimizer** with a constant learning rate.
+
+2. **MixtureOfExperts**:
+   - Performed well with an **MSE of 0.000179** and **R² of 0.9964**.
+   - The model dynamically combined predictions from multiple experts, showcasing robustness but slightly lagging behind MLP.
+
+3. **LGBMRegressor**:
+   - Delivered solid performance with an **MSE of 0.000252** and **R² of 0.9949**.
+   - Optimized parameters included a learning rate of 0.1 and 200 estimators, but it was outperformed by the MLP and Mixture of Experts.
 
 ---
 
@@ -92,6 +125,14 @@ python main.py --data_dir data/ --output_dir preprocessed_data/ --target_column 
 3. **Predictions and Residuals**:
    ![All models](https://github.com/VNAZZARENO/DVA263_PRO1_Group_4/blob/main/results/MLPRegressor_predictions_and_qqplot.png?raw=true)
    
+---
+
+### **Conclusion**
+
+- The **MLPRegressor** showed much better performance overall in terms of both MSE and R² score, making it the most effective model for the `risk_evaluation` prediction.
+- The **Mixture of Experts** approach provided better results than simple LGBM and can still be used in scenarios requiring robustness and results explanations.
+- The **LightGBM Regressor** remains a strong baseline but was outperformed by a combination of LGBM + Linear Regression.
+
 ---
 
 ## **Contact**
