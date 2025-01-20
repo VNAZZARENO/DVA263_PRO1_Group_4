@@ -45,6 +45,7 @@ def main(args):
         drop_col_override = ["hr", "hrv_lf", "hrv_hf", 'hrv_lfhf_ratio', 'EBRmean', 'BDmean']
         print(f"Dropping columns: {drop_col_override}")
 
+
         row_index_to_drop = [
             index for index, row in df_merged.iterrows()
             if row.isna().sum() > len(df_merged.columns) * 0.75
@@ -53,7 +54,7 @@ def main(args):
         df_merged.drop(columns=drop_col_override, axis=1, inplace=True)
         df_merged.fillna(df_merged.mean(numeric_only=True), inplace=True)
 
-    if args.use_pca:
+    if args.use_pca == True:
         print("USING PCA:")
         target_col_data = df_merged[args.target_column]
         df_features = df_merged.drop(columns=[args.target_column])
@@ -66,6 +67,7 @@ def main(args):
         df_merged[args.target_column] = target_col_data.reset_index(drop=True)
 
         if args.use_test_dataset:
+            print("USING TESTING DATASET:")
             df_test = create_features(simulation_data)
             target_test_col = df_test[args.target_column]
             df_test_features = df_test.drop(columns=[args.target_column])
@@ -111,9 +113,7 @@ def main(args):
             disp = ConfusionMatrixDisplay(confusion_matrix=cm)
             disp.plot(cmap='viridis')
             plt.title(f"Confusion Matrix for {result['model']}")
-            # plot_path = f"results/{result['model']}_confusion_matrix_{args.task_type}.png"
-            plot_path = os.path.join(args.output_dir, f"{result['model']}_confusion_matrix_{args.task_type}.png")
-
+            plot_path = os.path.join("results/plots/", f"{result['model']}_confusion_matrix_{args.task_type}.png")
             plt.savefig(plot_path)
             print(f"Confusion matrix saved to {plot_path}")
             plt.show()
@@ -191,7 +191,6 @@ def main(args):
         plot_model_comparison(classification_summaries.to_dict('records'), metrics_to_compare)
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run data preprocessing and model pipeline.")
     parser.add_argument('--data_dir', type=str, default="data/Simusafe_Dataset", help="Path to the dataset directory.")
@@ -206,3 +205,5 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     main(args)
+
+

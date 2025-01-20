@@ -29,7 +29,7 @@ from sklearn.model_selection import train_test_split, cross_val_score, GridSearc
 from sklearn.base import BaseEstimator, RegressorMixin, clone
 
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.neural_network import MLPRegressor
+from sklearn.neural_network import MLPRegressor, MLPClassifier
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neighbors import KNeighborsClassifier
@@ -300,7 +300,27 @@ def model_pipeline(df,
                     'n_estimators': [100, 200, 500],
                     'max_depth': [3, 5, 7]
                 }
-            )
+            ),
+            (
+                MixtureOfExperts(experts=[
+                    LGBMClassifier(random_state=random_state),
+                    RandomForestClassifier(random_state=random_state),
+                    XGBClassifier(random_state=random_state, use_label_encoder=False)
+                ]),
+                {
+                    # GridSearch over MixtureOfExperts is not directly supported.
+                }
+            ),
+            (
+                MLPClassifier(max_iter=500, random_state=random_state),
+                {
+                    'hidden_layer_sizes': [(64,), (128,), (64, 32)],
+                    'activation': ['relu', 'tanh'],
+                    'solver': ['adam', 'sgd'],
+                    'alpha': [0.0001, 0.001],
+                    'learning_rate': ['constant', 'adaptive']
+                }
+            ),
         ]
         scoring_metric = 'accuracy'
 
@@ -322,19 +342,32 @@ def model_pipeline(df,
         
         rare_class_noisy = rare_class_rows.copy()
         noise_scale = 0.1
-        for _ in range(100): 
-            noisy_rows = rare_class_rows + np.random.normal(0, noise_scale, rare_class_rows.shape)
+
+        for _ in range(20): 
+            rare_class_numeric = rare_class_rows.select_dtypes(include=[np.number])
+            noisy_numeric = rare_class_numeric + np.random.normal(0, noise_scale, rare_class_numeric.shape)
+
+            noisy_rows = rare_class_rows.copy()
+            noisy_rows[rare_class_numeric.columns] = noisy_numeric
+
             rare_class_noisy = pd.concat([rare_class_noisy, noisy_rows], ignore_index=True)
-        
+
         X = pd.concat([X, rare_class_noisy], ignore_index=True)
         y = pd.concat([y, pd.Series([rare_class_value] * len(rare_class_noisy))], ignore_index=True)
-        
+
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=0.2, random_state=random_state, stratify=y
         )
-        
+
+        numeric_cols = X_train.select_dtypes(include=[np.number]).columns
+        X_train_numeric = X_train[numeric_cols]
+
         smote = SMOTE(random_state=random_state, k_neighbors=5)
-        X_train_resampled, y_train_resampled = smote.fit_resample(X_train, y_train)
+        X_train_resampled, y_train_resampled = smote.fit_resample(X_train_numeric, y_train)
+
+        X_train_resampled = pd.DataFrame(X_train_resampled, columns=numeric_cols)
+        X_train_resampled = pd.concat([X_train.drop(columns=numeric_cols).reset_index(drop=True), 
+                                    X_train_resampled.reset_index(drop=True)], axis=1)
 
     else:
         if test_dataset is not None:
@@ -463,7 +496,7 @@ def plot_results(results):
         plt.show()
 
 
-def plot_model_comparison(results, metrics, output_dir="results"):
+def plot_model_comparison(results, metrics, output_dir="results/plots"):
     os.makedirs(output_dir, exist_ok=True)
     try:
         model_names = [result['Model'] for result in results]
@@ -477,9 +510,11 @@ def plot_model_comparison(results, metrics, output_dir="results"):
         plt.title(f'Comparison of Models based on {metric}')
         plt.xlabel('Models')
         plt.ylabel(metric)
+        plt.ylim((0.95, 1.02))
         plt.xticks(rotation=45)
         plt.tight_layout()
         plot_path = os.path.join(output_dir, f"comparison_{metric.lower().replace(' ', '_')}.png")
         plt.savefig(plot_path)
+        plt.show()
         print(f"{metric} comparison plot saved to {plot_path}")
         plt.close()
