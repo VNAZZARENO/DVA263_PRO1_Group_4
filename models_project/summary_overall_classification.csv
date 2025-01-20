@@ -1,9 +1,9 @@
 Model,Accuracy,N/A,Best Parameters
-LGBMClassifier,0.9704766553337597,,"{'model__learning_rate': 0.1, 'model__max_depth': 7, 'model__n_estimators': 500}"
-SVC,0.9610453765105866,,"{'model__C': 10, 'model__kernel': 'rbf', 'model__probability': True}"
-RandomForestClassifier,0.9729365132796983,,"{'model__max_depth': None, 'model__min_samples_split': 2, 'model__n_estimators': 200}"
-LogisticRegression,0.6490288484195644,,"{'model__C': 1, 'model__max_iter': 100, 'model__solver': 'lbfgs'}"
+LGBMClassifier,0.9688373110714646,,"{'model__learning_rate': 0.1, 'model__max_depth': 7, 'model__n_estimators': 200}"
+SVC,0.9614552125761605,,"{'model__C': 10, 'model__kernel': 'rbf', 'model__probability': True}"
+RandomForestClassifier,0.9741668630289159,,"{'model__max_depth': None, 'model__min_samples_split': 2, 'model__n_estimators': 100}"
+LogisticRegression,0.6502583566162857,,"{'model__C': 10, 'model__max_iter': 100, 'model__solver': 'lbfgs'}"
 KNeighborsClassifier,0.9553043053825698,,"{'model__metric': 'manhattan', 'model__n_neighbors': 3, 'model__weights': 'distance'}"
-XGBClassifier,0.9712938028074192,,"{'model__learning_rate': 0.1, 'model__max_depth': 7, 'model__n_estimators': 200}"
-MixtureOfExperts,0.9487704918032787,,{}
-MLPClassifier,0.97785959538156,,"{'model__activation': 'relu', 'model__alpha': 0.0001, 'model__hidden_layer_sizes': (64, 32), 'model__learning_rate': 'constant', 'model__solver': 'adam'}"
+XGBClassifier,0.9704724475712796,,"{'model__learning_rate': 0.05, 'model__max_depth': 5, 'model__n_estimators': 500}"
+MixtureOfExperts,0.9512295081967214,,{}
+MLPClassifier,0.9774514424209781,,"{'model__activation': 'relu', 'model__alpha': 0.0001, 'model__hidden_layer_sizes': (64, 32), 'model__learning_rate': 'constant', 'model__solver': 'adam'}"
