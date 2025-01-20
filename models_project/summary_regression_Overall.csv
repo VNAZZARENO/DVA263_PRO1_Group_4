@@ -1,2 +1,0 @@
-Model,Best CV Score (Neg MSE),MSE on Test Set,R² on Test Set,Best Parameters
-LGBMClassifier,0.9995901639344262,0.0,1.0,"{'model__learning_rate': 0.01, 'model__n_estimators': 100}"

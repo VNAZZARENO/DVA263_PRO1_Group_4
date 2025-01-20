@@ -1,2 +1,0 @@
-Model,Accuracy,N/A,Best Parameters
-LGBMClassifier,0.9995901639344262,,"{'model__learning_rate': 0.01, 'model__n_estimators': 100}"
