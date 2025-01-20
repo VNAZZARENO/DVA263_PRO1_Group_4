@@ -1,13 +1,13 @@
 Model,Precision,Recall,F1-Score,Support,Classification Report
-LGBMClassifier,0.9463996991915773,0.9212962962962963,0.9325860068026391,216.0,"              precision    recall  f1-score   support
+LGBMClassifier,0.9329938271604937,0.9166666666666666,0.9245874587458744,216.0,"              precision    recall  f1-score   support
 
-           0       0.97      0.94      0.96       204
-           1       0.20      0.38      0.26         8
+           0       0.96      0.95      0.96       204
+           1       0.08      0.12      0.10         8
            2       1.00      1.00      1.00         4
 
     accuracy                           0.92       216
-   macro avg       0.72      0.77      0.74       216
-weighted avg       0.95      0.92      0.93       216
+   macro avg       0.68      0.69      0.69       216
+weighted avg       0.93      0.92      0.92       216
 "
 SVC,0.942652329749104,0.8796296296296297,0.9055555555555556,216.0,"              precision    recall  f1-score   support
 
@@ -19,15 +19,15 @@ SVC,0.942652329749104,0.8796296296296297,0.9055555555555556,216.0,"             
    macro avg       0.60      0.80      0.66       216
 weighted avg       0.94      0.88      0.91       216
 "
-RandomForestClassifier,0.9391364291533497,0.9120370370370371,0.9246549487794203,216.0,"              precision    recall  f1-score   support
+RandomForestClassifier,0.9323868017335355,0.9074074074074074,0.9191573062540803,216.0,"              precision    recall  f1-score   support
 
-           0       0.97      0.94      0.95       204
-           1       0.13      0.25      0.17         8
-           2       1.00      1.00      1.00         4
+           0       0.96      0.94      0.95       204
+           1       0.07      0.12      0.09         8
+           2       1.00      0.75      0.86         4
 
     accuracy                           0.91       216
-   macro avg       0.70      0.73      0.71       216
-weighted avg       0.94      0.91      0.92       216
+   macro avg       0.68      0.61      0.63       216
+weighted avg       0.93      0.91      0.92       216
 "
 LogisticRegression,0.9350277330470568,0.37962962962962965,0.5067929408619845,216.0,"              precision    recall  f1-score   support
 
@@ -49,33 +49,33 @@ KNeighborsClassifier,0.9497783234431486,0.8657407407407407,0.8995119673482246,21
    macro avg       0.65      0.83      0.69       216
 weighted avg       0.95      0.87      0.90       216
 "
-XGBClassifier,0.9312570145903478,0.9120370370370371,0.9206744057490327,216.0,"              precision    recall  f1-score   support
+XGBClassifier,0.9338699671195483,0.9166666666666666,0.9247689652707574,216.0,"              precision    recall  f1-score   support
 
-           0       0.97      0.94      0.96       204
+           0       0.97      0.95      0.96       204
            1       0.08      0.12      0.10         8
-           2       0.67      1.00      0.80         4
+           2       0.80      1.00      0.89         4
 
-    accuracy                           0.91       216
-   macro avg       0.57      0.69      0.62       216
-weighted avg       0.93      0.91      0.92       216
+    accuracy                           0.92       216
+   macro avg       0.62      0.69      0.65       216
+weighted avg       0.93      0.92      0.92       216
 "
-MixtureOfExperts,0.9329938271604937,0.9166666666666666,0.9245874587458744,216.0,"              precision    recall  f1-score   support
+MixtureOfExperts,0.9334388662746872,0.9212962962962963,0.9272182513897914,216.0,"              precision    recall  f1-score   support
 
-           0       0.96      0.95      0.96       204
-           1       0.08      0.12      0.10         8
+           0       0.97      0.95      0.96       204
+           1       0.09      0.12      0.11         8
            2       1.00      1.00      1.00         4
 
     accuracy                           0.92       216
-   macro avg       0.68      0.69      0.69       216
-weighted avg       0.93      0.92      0.92       216
+   macro avg       0.69      0.69      0.69       216
+weighted avg       0.93      0.92      0.93       216
 "
-MLPClassifier,0.9348290598290597,0.9027777777777778,0.9173705869612303,216.0,"              precision    recall  f1-score   support
+MLPClassifier,0.9369563868726347,0.9212962962962963,0.928472668974461,216.0,"              precision    recall  f1-score   support
 
-           0       0.97      0.93      0.95       204
-           1       0.12      0.25      0.17         8
+           0       0.97      0.95      0.96       204
+           1       0.17      0.25      0.20         8
            2       0.80      1.00      0.89         4
 
-    accuracy                           0.90       216
-   macro avg       0.63      0.73      0.67       216
-weighted avg       0.93      0.90      0.92       216
+    accuracy                           0.92       216
+   macro avg       0.65      0.73      0.68       216
+weighted avg       0.94      0.92      0.93       216
 "

@@ -505,18 +505,25 @@ def plot_model_comparison(results, metrics, output_dir="results/plots"):
 
     for metric in metrics:
         metric_values = [result.get(metric, 0) for result in results]
-        min_metric_value = min(metric_values)  
+        min_metric_value = min(metric_values)
+        
         plt.figure(figsize=(10, 6))
-        plt.bar(model_names, metric_values, color='skyblue')
+        bars = plt.bar(model_names, metric_values, color='skyblue')
         plt.title(f'Comparison of Models based on {metric}')
         plt.xlabel('Models')
         plt.ylabel(metric)
-        plt.ylim((min_metric_value, 1.0))  
+        plt.ylim((min_metric_value - 0.03, 1.0))
         plt.xticks(rotation=45)
+        
+        for bar, value in zip(bars, metric_values):
+            plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height() + 0.01, 
+                     f'{value:.2f}', ha='center', va='bottom', fontsize=10)
+        
         plt.tight_layout()
         plot_path = os.path.join(output_dir, f"comparison_{metric.lower().replace(' ', '_')}.png")
         plt.savefig(plot_path)
         plt.show()
         print(f"{metric} comparison plot saved to {plot_path}")
         plt.close()
+
 
