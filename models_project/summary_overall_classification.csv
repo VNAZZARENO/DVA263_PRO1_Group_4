@@ -1,9 +1,0 @@
-Model,Accuracy,N/A,Best Parameters
-LGBMClassifier,1.0,,"{'model__learning_rate': 0.05, 'model__max_depth': 3, 'model__n_estimators': 200}"
-SVC,1.0,,"{'model__C': 1, 'model__kernel': 'rbf', 'model__probability': True}"
-RandomForestClassifier,1.0,,"{'model__max_depth': None, 'model__min_samples_split': 2, 'model__n_estimators': 100}"
-LogisticRegression,0.9995901639344262,,"{'model__C': 0.01, 'model__max_iter': 100, 'model__solver': 'lbfgs'}"
-KNeighborsClassifier,0.9975409836065575,,"{'model__metric': 'manhattan', 'model__n_neighbors': 3, 'model__weights': 'uniform'}"
-XGBClassifier,1.0,,"{'model__learning_rate': 0.01, 'model__max_depth': 3, 'model__n_estimators': 100}"
-MixtureOfExperts,0.9995901639344262,,{}
-MLPClassifier,0.9995901639344262,,"{'model__activation': 'relu', 'model__alpha': 0.0001, 'model__hidden_layer_sizes': (128,), 'model__learning_rate': 'constant', 'model__solver': 'adam'}"
