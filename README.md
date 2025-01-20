@@ -78,7 +78,6 @@ python main.py --target_column risk_evaluation --task_type classification --drop
 - `--task_type`: Type of task (`regression` or `classification`).
 - `--use_pca`: Use PCA for Feature Reduction.
 - `--use_test_dataset`: Use or not Simulation data as a testing dataset (default: `False`).
-- `--use_test_dataset`: Use or not Simulation data as a testing dataset (default: `False`).
 - `--subset_frac`: Fraction of the dataset to use (default: `1.0` for all data).
 - `--drop_nan_columns`: Drop the columns which are >75% NaN values (default: `False`).
 - `--drop_nan_columns`: Drop the columns which are >75% NaN values (default: `False`).
