@@ -1,33 +1,33 @@
 Model,Precision,Recall,F1-Score,Support,Classification Report
-LGBMClassifier,0.9433339167979462,0.9181034482758621,0.9298511592084258,232.0,"              precision    recall  f1-score   support
+LGBMClassifier,0.9500962716611238,0.9267241379310345,0.9372352477128019,232.0,"              precision    recall  f1-score   support
 
-           0       0.97      0.94      0.95       204
-           1       0.13      0.25      0.17         8
-           2       1.00      1.00      1.00        20
-
-    accuracy                           0.92       232
-   macro avg       0.70      0.73      0.71       232
-weighted avg       0.94      0.92      0.93       232
-"
-SVC,0.9441853765991698,0.8836206896551724,0.9087397842827325,232.0,"              precision    recall  f1-score   support
-
-           0       0.98      0.89      0.93       204
-           1       0.16      0.50      0.24         8
-           2       0.91      1.00      0.95        20
-
-    accuracy                           0.88       232
-   macro avg       0.68      0.80      0.71       232
-weighted avg       0.94      0.88      0.91       232
-"
-RandomForestClassifier,0.9448850574712644,0.9310344827586207,0.9375896210310685,232.0,"              precision    recall  f1-score   support
-
-           0       0.97      0.95      0.96       204
-           1       0.17      0.25      0.20         8
+           0       0.97      0.94      0.96       204
+           1       0.20      0.38      0.26         8
            2       1.00      1.00      1.00        20
 
     accuracy                           0.93       232
-   macro avg       0.71      0.73      0.72       232
-weighted avg       0.94      0.93      0.94       232
+   macro avg       0.72      0.77      0.74       232
+weighted avg       0.95      0.93      0.94       232
+"
+SVC,0.9406746626686657,0.8793103448275862,0.9044068776622785,232.0,"              precision    recall  f1-score   support
+
+           0       0.98      0.88      0.93       204
+           1       0.16      0.50      0.24         8
+           2       0.87      1.00      0.93        20
+
+    accuracy                           0.88       232
+   macro avg       0.67      0.79      0.70       232
+weighted avg       0.94      0.88      0.90       232
+"
+RandomForestClassifier,0.9500962716611238,0.9267241379310345,0.9372352477128019,232.0,"              precision    recall  f1-score   support
+
+           0       0.97      0.94      0.96       204
+           1       0.20      0.38      0.26         8
+           2       1.00      1.00      1.00        20
+
+    accuracy                           0.93       232
+   macro avg       0.72      0.77      0.74       232
+weighted avg       0.95      0.93      0.94       232
 "
 LogisticRegression,0.8898943265377137,0.4396551724137931,0.5204155886032867,232.0,"              precision    recall  f1-score   support
 
@@ -49,13 +49,13 @@ KNeighborsClassifier,0.9525850728937032,0.875,0.9062552780759145,232.0,"        
    macro avg       0.70      0.83      0.72       232
 weighted avg       0.95      0.88      0.91       232
 "
-XGBClassifier,0.9443104114738147,0.9267241379310345,0.9349928899428344,232.0,"              precision    recall  f1-score   support
+XGBClassifier,0.9500962716611238,0.9267241379310345,0.9372352477128019,232.0,"              precision    recall  f1-score   support
 
-           0       0.97      0.95      0.96       204
-           1       0.15      0.25      0.19         8
+           0       0.97      0.94      0.96       204
+           1       0.20      0.38      0.26         8
            2       1.00      1.00      1.00        20
 
     accuracy                           0.93       232
-   macro avg       0.71      0.73      0.72       232
-weighted avg       0.94      0.93      0.93       232
+   macro avg       0.72      0.77      0.74       232
+weighted avg       0.95      0.93      0.94       232
 "
