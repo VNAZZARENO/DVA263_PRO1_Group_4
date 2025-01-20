@@ -18,6 +18,10 @@ import warnings
 warnings.filterwarnings("ignore", message="Could not find the number of physical cores")
 
 
+import warnings
+warnings.filterwarnings("ignore", message="Could not find the number of physical cores")
+
+
 def main(args):
     os.makedirs(args.output_dir, exist_ok=True)
 
@@ -55,6 +59,7 @@ def main(args):
         df_merged.drop(index=row_index_to_drop, inplace=True)
         df_merged.drop(columns=drop_col_override, axis=1, inplace=True)
         df_merged.fillna(df_merged.mean(numeric_only=True), inplace=True)
+
 
         if args.use_test_dataset:
             df_test.drop(columns=drop_col_override, axis=1, inplace=True)

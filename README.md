@@ -77,7 +77,9 @@ python main.py --data_dir data/ --output_dir preprocessed_data/ --target_column 
 - `--target_column`: The column to predict (`risk_evaluation` in this case).
 - `--task_type`: Type of task (`regression` or `classification`).
 - `--use_test_dataset`: Use or not Simulation data as a testing dataset (default: `False`).
+- `--use_test_dataset`: Use or not Simulation data as a testing dataset (default: `False`).
 - `--subset_frac`: Fraction of the dataset to use (default: `1.0` for all data).
+- `--drop_nan_columns`: Drop the columns which are >75% NaN values (default: `False`).
 - `--drop_nan_columns`: Drop the columns which are >75% NaN values (default: `False`).
 - `--random_state`: Random seed for reproducibility (default: `42`).
 
