@@ -68,7 +68,7 @@ pip install -r requirements.txt
 ### **Execute Main Script**
 Run the entire pipeline (data preprocessing, model training, evaluation, and visualization) with:
 ```bash
-python main.py --target_column risk_evaluation --task_type classification --drop_nan_columns True --random_state 42
+python main.py --target_column risk_evaluation --task_type classification --use_pca True --drop_nan_columns True --random_state 42
 ```
 
 ### **Arguments:**
