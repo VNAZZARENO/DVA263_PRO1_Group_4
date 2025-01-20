@@ -1,0 +1,3 @@
+Model,Accuracy,N/A,Best Parameters
+LGBMClassifier,0.9746136310302056,,"{'model__learning_rate': 0.1, 'model__n_estimators': 200}"
+SVC,0.9393844916021321,,{'model__probability': True}
